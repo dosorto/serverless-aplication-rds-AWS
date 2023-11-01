@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Hello, world!</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">Aplicacion Serverless + RDS</a>
+    </div>
+  </nav>
+  <div class="row">
+    <div class="col-sm">
+    </div>
+    <div class="col-sm">
+      <h1>Read and Create PERSONA</h1>
+    </div>
+    <div class="col-sm">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+    </div>
+    <div class="col-sm">
+      <div>
+        <form>
+          <div class="row">
+            <div class="col">
+              <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+            </div>
+            <div class="col">
+              <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Lastname">
+            </div class="col">
+            <div>
+              <button type="button" id="btn" class="btn btn-primary">Registrar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm">
+
+    </div>
+  </div>
+
+  <div clas="container">
+    <div class="row">
+      <div class="col-sm">
+      </div>
+      <div class="col-sm">
+        <table class="table" id="datatable">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">LastName</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm">
+
+      </div>
+    </div>
+
+
+  </div>
+  <script>
+    //CAMBIA A LA URL DE TU API
+    const URL = "https://3s7azq2qv5.execute-api.us-east-2.amazonaws.com";
+    fetch(URL + '/personas', {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        var tabla = document.createElement('table');
+        for (const fila of data) {
+          let tr = document.createElement('tr');
+          for (const atributo of Object.values(fila)) {
+            var celda = document.createElement('td');
+            celda.textContent = atributo;
+            tr.appendChild(celda);
+          }
+          tr.appendChild(celda);
+          document.getElementById("datatable").appendChild(tr);
+        }
+      })
+    let btn = document.getElementById("btn")
+    btn.addEventListener("click", create_persona)
+
+    function create_persona() {
+      var name = document.getElementById('name').value;
+      var lastname = document.getElementById('lastname').value;
+
+      fetch(URL + '/persona', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "name": name,
+          "lastname": lastname
+        })
+      }).then(data => {
+        location.reload();
+      })
+
+    }
+  </script>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
